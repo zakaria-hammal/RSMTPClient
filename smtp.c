@@ -277,7 +277,8 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
             const char xoauth2_prefix[] = "AUTH XOAUTH2 ";
             char temp[4069] = {0};
 
-            snprintf(temp, sizeof(temp),"user=%s%cauth=Bearer %s%c%c", client.emailAdress, '\1', client.secretCode, '\1', '\1');
+            snprintf(temp, sizeof(temp), "user=%s%cauth=Bearer %s\%c%c", client.emailAdress,  0x01, client.secretCode, 0x01, 0x01);
+            printf("%s\n", temp);
             BIO *bio, *b64;
             BUF_MEM *bufferPtr;
 
@@ -291,7 +292,8 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
             BIO_flush(bio);
 
             BIO_get_mem_ptr(bio, &bufferPtr);
-            strcpy(req, bufferPtr->data);
+            memcpy(req, bufferPtr->data, bufferPtr->length);
+            req[bufferPtr->length] = '\0';
 
             BIO_free_all(bio);
             printf("%s\n", req);
@@ -536,7 +538,8 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
                 const char xoauth2_prefix[] = "AUTH XOAUTH2 ";
                 char temp[4069] = {0};
 
-                snprintf(temp, sizeof(temp),"user=%s%cauth=Bearer %s%c%c", client.emailAdress, '\1', client.secretCode, '\1', '\1');
+                snprintf(temp, sizeof(temp), "user=%s%cauth=Bearer %s\%c%c", client.emailAdress,  0x01, client.secretCode, 0x01, 0x01);
+                printf("%s\n", temp);
                 BIO *bio, *b64;
                 BUF_MEM *bufferPtr;
 
@@ -550,7 +553,8 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
                 BIO_flush(bio);
 
                 BIO_get_mem_ptr(bio, &bufferPtr);
-                strcpy(req, bufferPtr->data);
+                memcpy(req, bufferPtr->data, bufferPtr->length);
+                req[bufferPtr->length] = '\0';
 
                 BIO_free_all(bio);
                 printf("%s\n", req);
@@ -746,7 +750,8 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
                 const char xoauth2_prefix[] = "AUTH XOAUTH2 ";
                 char temp[4069] = {0};
 
-                snprintf(temp, sizeof(temp),"user=%s%cauth=Bearer %s%c%c", client.emailAdress, '\1', client.secretCode, '\1', '\1');
+                snprintf(temp, sizeof(temp), "user=%s%cauth=Bearer %s\%c%c", client.emailAdress,  0x01, client.secretCode, 0x01, 0x01);
+                printf("%s\n", temp);
                 BIO *bio, *b64;
                 BUF_MEM *bufferPtr;
 
@@ -760,7 +765,8 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
                 BIO_flush(bio);
 
                 BIO_get_mem_ptr(bio, &bufferPtr);
-                strcpy(req, bufferPtr->data);
+                memcpy(req, bufferPtr->data, bufferPtr->length);
+                req[bufferPtr->length] = '\0';
 
                 BIO_free_all(bio);
                 printf("%s\n", req);
