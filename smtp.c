@@ -274,16 +274,34 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
         }
         else
         {
-            strcpy(req, "AUTH XOAUTH2\r\n");
-            SSL_write(ssl, req, strlen(req));
+            const char xoauth2_prefix[] = "AUTH XOAUTH2 ";
+            char temp[4069] = {0};
 
-            base64_encode(req, client.secretCode);
+            snprintf(temp, sizeof(temp),"user=%s%cauth=Bearer %s%c%c", client.emailAdress, '\1', client.secretCode, '\1', '\1');
+            BIO *bio, *b64;
+            BUF_MEM *bufferPtr;
+
+            b64 = BIO_new(BIO_f_base64());
+            bio = BIO_new(BIO_s_mem());
+            bio = BIO_push(b64, bio);
+
+            BIO_set_flags(bio, BIO_FLAGS_BASE64_NO_NL);
+
+            BIO_write(bio, temp, strlen(temp));
+            BIO_flush(bio);
+
+            BIO_get_mem_ptr(bio, &bufferPtr);
+            strcpy(req, bufferPtr->data);
+
+            BIO_free_all(bio);
+            printf("%s\n", req);
             strcat(req, "\r\n");
-            SSL_write(ssl, req, strlen(req));
+            sprintf(temp, "%s%s", xoauth2_prefix, req);
+            SSL_write(ssl, temp, strlen(temp));
 
             if (enableLogs)
             {
-                printf("C: %s", req);
+                printf("C: %s", temp);
                 SSL_read(ssl, buffer, sizeof(buffer));
                 printf("S: %s", buffer);
             }
@@ -515,16 +533,34 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
             }
             else
             {
-                strcpy(req, "AUTH XOAUTH2\r\n");
-                SSL_write(ssl, req, strlen(req));
+                const char xoauth2_prefix[] = "AUTH XOAUTH2 ";
+                char temp[4069] = {0};
 
-                base64_encode(req, client.secretCode);
+                snprintf(temp, sizeof(temp),"user=%s%cauth=Bearer %s%c%c", client.emailAdress, '\1', client.secretCode, '\1', '\1');
+                BIO *bio, *b64;
+                BUF_MEM *bufferPtr;
+
+                b64 = BIO_new(BIO_f_base64());
+                bio = BIO_new(BIO_s_mem());
+                bio = BIO_push(b64, bio);
+
+                BIO_set_flags(bio, BIO_FLAGS_BASE64_NO_NL);
+
+                BIO_write(bio, temp, strlen(temp));
+                BIO_flush(bio);
+
+                BIO_get_mem_ptr(bio, &bufferPtr);
+                strcpy(req, bufferPtr->data);
+
+                BIO_free_all(bio);
+                printf("%s\n", req);
                 strcat(req, "\r\n");
-                SSL_write(ssl, req, strlen(req));
+                sprintf(temp, "%s%s", xoauth2_prefix, req);
+                SSL_write(ssl, temp, strlen(temp));
 
                 if (enableLogs)
                 {
-                    printf("C: %s", req);
+                    printf("C: %s", temp);
                     SSL_read(ssl, buffer, sizeof(buffer));
                     printf("S: %s", buffer);
                 }
@@ -707,16 +743,34 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
             }
             else
             {
-                strcpy(req, "AUTH XOAUTH2\r\n");
-                send(clientfd, req, strlen(req), 0);
+                const char xoauth2_prefix[] = "AUTH XOAUTH2 ";
+                char temp[4069] = {0};
 
-                base64_encode(req, client.secretCode);
+                snprintf(temp, sizeof(temp),"user=%s%cauth=Bearer %s%c%c", client.emailAdress, '\1', client.secretCode, '\1', '\1');
+                BIO *bio, *b64;
+                BUF_MEM *bufferPtr;
+
+                b64 = BIO_new(BIO_f_base64());
+                bio = BIO_new(BIO_s_mem());
+                bio = BIO_push(b64, bio);
+
+                BIO_set_flags(bio, BIO_FLAGS_BASE64_NO_NL);
+
+                BIO_write(bio, temp, strlen(temp));
+                BIO_flush(bio);
+
+                BIO_get_mem_ptr(bio, &bufferPtr);
+                strcpy(req, bufferPtr->data);
+
+                BIO_free_all(bio);
+                printf("%s\n", req);
                 strcat(req, "\r\n");
-                send(clientfd, req, strlen(req), 0);
+                sprintf(temp, "%s%s", xoauth2_prefix, req);
+                send(clientfd, temp, strlen(temp), 0);
 
                 if (enableLogs)
                 {
-                    printf("C: %s", req);
+                    printf("C: %s", temp);
                     recv(clientfd, buffer, sizeof(buffer), 0);
                     printf("S: %s", buffer);
                 }
