@@ -239,35 +239,54 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
             printf("S: %s", buffer);
         }
 
-        strcpy(req, "AUTH LOGIN\r\n");
-        SSL_write(ssl, req, strlen(req));
-        if (enableLogs)
+        if (client.authType == LOGIN)
         {
-            printf("C: %s", req);
-            SSL_read(ssl, buffer, sizeof(buffer));
-            printf("S: %s", buffer);
+            strcpy(req, "AUTH LOGIN\r\n");
+            SSL_write(ssl, req, strlen(req));
+            if (enableLogs)
+            {
+                printf("C: %s", req);
+                SSL_read(ssl, buffer, sizeof(buffer));
+                printf("S: %s", buffer);
+            }
+
+            base64_encode(req, client.emailAdress);
+            strcat(req, "\r\n");
+            SSL_write(ssl, req, strlen(req));
+
+            if (enableLogs)
+            {
+                printf("C: %s", req);
+                SSL_read(ssl, buffer, sizeof(buffer));
+                printf("S: %s", buffer);
+            }
+
+            base64_encode(req, client.secretCode);
+            strcat(req, "\r\n");
+            SSL_write(ssl, req, strlen(req));
+
+            if (enableLogs)
+            {
+                printf("C: %s", req);
+                SSL_read(ssl, buffer, sizeof(buffer));
+                printf("S: %s", buffer);
+            }
         }
-
-        base64_encode(req, client.emailAdress);
-        strcat(req, "\r\n");
-        SSL_write(ssl, req, strlen(req));
-
-        if (enableLogs)
+        else
         {
-            printf("C: %s", req);
-            SSL_read(ssl, buffer, sizeof(buffer));
-            printf("S: %s", buffer);
-        }
+            strcpy(req, "AUTH XOAUTH2\r\n");
+            SSL_write(ssl, req, strlen(req));
 
-        base64_encode(req, client.secretCode);
-        strcat(req, "\r\n");
-        SSL_write(ssl, req, strlen(req));
+            base64_encode(req, client.secretCode);
+            strcat(req, "\r\n");
+            SSL_write(ssl, req, strlen(req));
 
-        if (enableLogs)
-        {
-            printf("C: %s", req);
-            SSL_read(ssl, buffer, sizeof(buffer));
-            printf("S: %s", buffer);
+            if (enableLogs)
+            {
+                printf("C: %s", req);
+                SSL_read(ssl, buffer, sizeof(buffer));
+                printf("S: %s", buffer);
+            }
         }
 
         sprintf(req, "MAIL FROM: <%s>\r\n", client.emailAdress);
@@ -461,35 +480,54 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
                 printf("S: %s", buffer);
             }
 
-            strcpy(req, "AUTH LOGIN\r\n");
-            SSL_write(ssl, req, strlen(req));
-            if (enableLogs)
+            if (client.authType == LOGIN)
             {
+                strcpy(req, "AUTH LOGIN\r\n");
+                SSL_write(ssl, req, strlen(req));
+                if (enableLogs)
+                {
                     printf("C: %s", req);
-                SSL_read(ssl, buffer, sizeof(buffer));
-                printf("S: %s", buffer);
+                    SSL_read(ssl, buffer, sizeof(buffer));
+                    printf("S: %s", buffer);
+                }
+
+                base64_encode(req, client.emailAdress);
+                strcat(req, "\r\n");
+                SSL_write(ssl, req, strlen(req));
+
+                if (enableLogs)
+                {
+                    printf("C: %s", req);
+                    SSL_read(ssl, buffer, sizeof(buffer));
+                    printf("S: %s", buffer);
+                }
+
+                base64_encode(req, client.secretCode);
+                strcat(req, "\r\n");
+                SSL_write(ssl, req, strlen(req));
+
+                if (enableLogs)
+                {
+                    printf("C: %s", req);
+                    SSL_read(ssl, buffer, sizeof(buffer));
+                    printf("S: %s", buffer);
+                }
             }
-
-            base64_encode(req, client.emailAdress);
-            strcat(req, "\r\n");
-            SSL_write(ssl, req, strlen(req));
-
-            if (enableLogs)
+            else
             {
-                printf("C: %s", req);
-                SSL_read(ssl, buffer, sizeof(buffer));
-                printf("S: %s", buffer);
-            }
+                strcpy(req, "AUTH XOAUTH2\r\n");
+                SSL_write(ssl, req, strlen(req));
 
-            base64_encode(req, client.secretCode);
-            strcat(req, "\r\n");
-            SSL_write(ssl, req, strlen(req));
+                base64_encode(req, client.secretCode);
+                strcat(req, "\r\n");
+                SSL_write(ssl, req, strlen(req));
 
-            if (enableLogs)
-            {
-                printf("C: %s", req);
-                SSL_read(ssl, buffer, sizeof(buffer));
-                printf("S: %s", buffer);
+                if (enableLogs)
+                {
+                    printf("C: %s", req);
+                    SSL_read(ssl, buffer, sizeof(buffer));
+                    printf("S: %s", buffer);
+                }
             }
 
             sprintf(req, "MAIL FROM: <%s>\r\n", client.emailAdress);
@@ -634,35 +672,54 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
             close(clientfd);
         }
         else {
-            strcpy(req, "AUTH LOGIN\r\n");
-            send(clientfd, req, strlen(req), 0);
-            if (enableLogs)
+            if (client.authType == LOGIN)
             {
-                printf("C: %s", req);
-                recv(clientfd, buffer, sizeof(buffer), 0);
-                printf("S: %s", buffer);
+                strcpy(req, "AUTH LOGIN\r\n");
+                send(clientfd, req, strlen(req), 0);
+                if (enableLogs)
+                {
+                    printf("C: %s", req);
+                    recv(clientfd, buffer, sizeof(buffer), 0);
+                    printf("S: %s", buffer);
+                }
+
+                base64_encode(req, client.emailAdress);
+                strcat(req, "\r\n");
+                send(clientfd, req, strlen(req), 0);
+
+                if (enableLogs)
+                {
+                    printf("C: %s", req);
+                    recv(clientfd, buffer, sizeof(buffer), 0);
+                    printf("S: %s", buffer);
+                }
+
+                base64_encode(req, client.secretCode);
+                strcat(req, "\r\n");
+                send(clientfd, req, strlen(req), 0);
+
+                if (enableLogs)
+                {
+                    printf("C: %s", req);
+                    recv(clientfd, buffer, sizeof(buffer), 0);
+                    printf("S: %s", buffer);
+                }
             }
-
-            base64_encode(req, client.emailAdress);
-            strcat(req, "\r\n");
-            send(clientfd, req, strlen(req), 0);
-
-            if (enableLogs)
+            else
             {
-                printf("C: %s", req);
-                recv(clientfd, buffer, sizeof(buffer), 0);
-                printf("S: %s", buffer);
-            }
+                strcpy(req, "AUTH XOAUTH2\r\n");
+                send(clientfd, req, strlen(req), 0);
 
-            base64_encode(req, client.secretCode);
-            strcat(req, "\r\n");
-            send(clientfd, req, strlen(req), 0);
+                base64_encode(req, client.secretCode);
+                strcat(req, "\r\n");
+                send(clientfd, req, strlen(req), 0);
 
-            if (enableLogs)
-            {
-                printf("C: %s", req);
-                recv(clientfd, buffer, sizeof(buffer), 0);
-                printf("S: %s", buffer);
+                if (enableLogs)
+                {
+                    printf("C: %s", req);
+                    recv(clientfd, buffer, sizeof(buffer), 0);
+                    printf("S: %s", buffer);
+                }
             }
 
             sprintf(req, "MAIL FROM: <%s>\r\n", client.emailAdress);

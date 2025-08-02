@@ -194,7 +194,6 @@ send_email(client, message, 1);
 
 ### Protocol Support
 - 🔌 SSLv3 and TLS 1.0/1.1 are disabled (TLS 1.2+ only)
-- 🔐 Only supports `AUTH LOGIN` (no OAuth/OAuth2)
 - 📨 No support for SMTPUTF8 (ASCII-only emails)
 
 ### Technical Constraints

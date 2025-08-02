@@ -1,6 +1,12 @@
 #ifndef SMTP
 #define SMTP
 
+typedef enum AuthType
+{
+    LOGIN,
+    OAUTH2
+} AuthType;
+
 typedef struct SMTPClient SMTPClient;
 struct SMTPClient
 {
@@ -9,6 +15,7 @@ struct SMTPClient
     char secretCode[1024];
     int enableSSL;
     int port;
+    AuthType authType;
 };
 
 typedef struct Attachement Attachement;
