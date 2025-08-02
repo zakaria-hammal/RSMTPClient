@@ -90,7 +90,6 @@ send_email(client, message, 1);
 | `.csv` | `text/csv` |
 | `.md` | `text/markdown` |
 | `.rtf` | `application/rtf` |
-
 | **Images** ||
 | `.jpg`, `.jpeg` | `image/jpeg` |
 | `.png` | `image/png` |
@@ -101,7 +100,6 @@ send_email(client, message, 1);
 | `.ico` | `image/x-icon` |
 | `.tiff` | `image/tiff` |
 | `.psd` | `image/vnd.adobe.photoshop` |
-
 | **Audio** ||
 | `.mp3` | `audio/mpeg` |
 | `.wav` | `audio/wav` |
@@ -110,7 +108,6 @@ send_email(client, message, 1);
 | `.aac` | `audio/aac` |
 | `.mid`, `.midi` | `audio/midi` |
 | `.m4a` | `audio/mp4` |
-
 | **Video** ||
 | `.mp4` | `video/mp4` |
 | `.webm` | `video/webm` |
@@ -120,7 +117,6 @@ send_email(client, message, 1);
 | `.flv` | `video/x-flv` |
 | `.mkv` | `video/x-matroska` |
 | `.mpeg`, `.mpg` | `video/mpeg` |
-
 | **Archives** ||
 | `.zip` | `application/zip` |
 | `.rar` | `application/x-rar-compressed` |
@@ -128,7 +124,6 @@ send_email(client, message, 1);
 | `.gz` | `application/gzip` |
 | `.7z` | `application/x-7z-compressed` |
 | `.bz2` | `application/x-bzip2` |
-
 | **Office Documents** ||
 | `.pdf` | `application/pdf` |
 | `.doc` | `application/msword` |
@@ -140,7 +135,6 @@ send_email(client, message, 1);
 | `.odt` | `application/vnd.oasis.opendocument.text` |
 | `.ods` | `application/vnd.oasis.opendocument.spreadsheet` |
 | `.odp` | `application/vnd.oasis.opendocument.presentation` |
-
 | **Programming** ||
 | `.c`, `.h` | `text/x-c` |
 | `.cpp`, `.hpp` | `text/x-c++src`, `text/x-c++hdr` |
@@ -152,7 +146,6 @@ send_email(client, message, 1);
 | `.rb` | `application/x-ruby` |
 | `.go` | `text/x-go` |
 | `.swift` | `text/x-swift` |
-
 | **System Files** ||
 | `.exe`, `.dll` | `application/x-msdownload` |
 | `.so` | `application/x-sharedlib` |
@@ -160,13 +153,11 @@ send_email(client, message, 1);
 | `.rpm` | `application/x-rpm` |
 | `.apk` | `application/vnd.android.package-archive` |
 | `.dmg` | `application/x-apple-diskimage` |
-
 | **Fonts** ||
 | `.ttf` | `font/ttf` |
 | `.otf` | `font/otf` |
 | `.woff` | `font/woff` |
 | `.woff2` | `font/woff2` |
-
 | **Default** ||
 | *Others* | `application/octet-stream` |
 
