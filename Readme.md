@@ -37,7 +37,7 @@ gcc -o myapp myapp.c smtp.c -lssl -lcrypto
 
 int main() {
     SMTPClient client = {
-        .mailServer = "smtp.gmail.com",
+        .mailServer = "smtp.gmail.com", // example with gmail
         .emailAdress = "your@gmail.com",
         .secretCode = "yourpassword",  // Or app password
         .enableSSL = 1,
