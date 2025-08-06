@@ -136,19 +136,30 @@ static const char *get_mime_type(const char *filename) {
     return mime_types[sizeof(mime_types)/sizeof(MimeMapping) - 1].mime_type;
 }
 
-static char* read_file(char* path, size_t* length)
-{
+unsigned char* read_file(const char* path, size_t* length) {
     FILE* file = fopen(path, "rb");
     if (!file) return NULL;
 
-    struct stat st;
-    stat(path, &st);
-    *length = st.st_size;
+    fseek(file, 0, SEEK_END);
+    *length = ftell(file);
+    fseek(file, 0, SEEK_SET);
 
-    char* content = malloc(*length + 1);
+    unsigned char* content = malloc(*length + 1);
     fread(content, 1, *length, file);
-    content[*length] = '\0';
     fclose(file);
+
+    int is_text = 1;
+    for (size_t i = 0; i < *length; i++) {
+        if (content[i] == 0) {
+            is_text = 0;
+            break;
+        }
+    }
+
+    if (is_text) {
+        content[*length] = '\0';
+    }
+
     return content;
 }
 
@@ -168,6 +179,25 @@ static void base64_encode(char* dest, char* src)
 
     BIO_get_mem_ptr(bio, &bufferPtr);
     strcpy(dest, bufferPtr->data);
+
+    BIO_free_all(bio);
+}
+
+void base64_encode_file(unsigned char* dest, const unsigned char* src, size_t src_len) {
+    BIO *bio, *b64;
+    BUF_MEM *bufferPtr;
+
+    b64 = BIO_new(BIO_f_base64());
+    bio = BIO_new(BIO_s_mem());
+    bio = BIO_push(b64, bio);
+
+    BIO_set_flags(bio, BIO_FLAGS_BASE64_NO_NL);
+    BIO_write(bio, src, src_len);  // Use actual length, not strlen()
+    BIO_flush(bio);
+
+    BIO_get_mem_ptr(bio, &bufferPtr);
+    memcpy(dest, bufferPtr->data, bufferPtr->length);
+    dest[bufferPtr->length] = '\0';
 
     BIO_free_all(bio);
 }
@@ -385,10 +415,10 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
             SSL_write(ssl, req, strlen(req));
 
             AttachementListNode* current = message.attachementList.head;
-            char *file;
+            unsigned char *file;
             size_t* length = malloc(sizeof(size_t));
 
-            char *encoded_file;
+            unsigned char *encoded_file;
             size_t encoded_length;
 
             for (int i = 0; i < message.attachementList.numberOfElements; i++)
@@ -410,7 +440,7 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
 
                 encoded_file = malloc(encoded_length + 1);
 
-                base64_encode(encoded_file, file);
+                base64_encode_file(encoded_file, file, *length);
 
                 free(file);
 
@@ -646,10 +676,10 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
                 SSL_write(ssl, req, strlen(req));
 
                 AttachementListNode* current = message.attachementList.head;
-                char *file;
+                unsigned char *file;
                 size_t* length = malloc(sizeof(size_t));
 
-                char *encoded_file;
+                unsigned char *encoded_file;
                 size_t encoded_length;
 
                 for (int i = 0; i < message.attachementList.numberOfElements; i++)
@@ -671,7 +701,7 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
 
                     encoded_file = malloc(encoded_length + 1);
 
-                    base64_encode(encoded_file, file);
+                    base64_encode_file(encoded_file, file, *length);
 
                     free(file);
 
@@ -858,10 +888,10 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
                 send(clientfd, req, strlen(req), 0);
 
                 AttachementListNode* current = message.attachementList.head;
-                char *file;
+                unsigned char *file;
                 size_t* length = malloc(sizeof(size_t));
 
-                char *encoded_file;
+                unsigned char *encoded_file;
                 size_t encoded_length;
 
                 for (int i = 0; i < message.attachementList.numberOfElements; i++)
@@ -883,7 +913,7 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
 
                     encoded_file = malloc(encoded_length + 1);
 
-                    base64_encode(encoded_file, file);
+                    base64_encode_file(encoded_file, file, *length);
 
                     free(file);
 
