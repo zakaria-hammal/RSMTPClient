@@ -211,7 +211,7 @@ void insert_attachement(MailMessage *message, Attachement attachement)
     new->next = (*message).attachementList.head;
     (*message).attachementList.head = new;
 
-    (*message).attachementList.numberOfElements++;
+    ((*message).attachementList.numberOfElements)++;
 }
 
 void send_email(SMTPClient client, MailMessage message, int enableLogs)
@@ -684,6 +684,7 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
 
                 for (int i = 0; i < message.attachementList.numberOfElements; i++)
                 {
+                    //printf("%d\n", message.attachementList.numberOfElements);
                     sprintf(req,"Content-Disposition: attachment; filename=\"%s\"\r\n"
                                 "Content-Type: %s; name=\"%s\"\r\n"
                                 "Content-Transfer-Encoding: base64\r\n\r\n",
