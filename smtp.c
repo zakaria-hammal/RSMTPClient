@@ -459,6 +459,8 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
                 sprintf(req,"\r\n\r\n"
                             "--123456789\r\n");
                 SSL_write(ssl, req, strlen(req));
+
+                current = current->next;
             }
 
             sprintf(req,".\r\n");
@@ -684,7 +686,6 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
 
                 for (int i = 0; i < message.attachementList.numberOfElements; i++)
                 {
-                    //printf("%d\n", message.attachementList.numberOfElements);
                     sprintf(req,"Content-Disposition: attachment; filename=\"%s\"\r\n"
                                 "Content-Type: %s; name=\"%s\"\r\n"
                                 "Content-Transfer-Encoding: base64\r\n\r\n",
@@ -721,6 +722,8 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
                     sprintf(req,"\r\n\r\n"
                                 "--123456789\r\n");
                     SSL_write(ssl, req, strlen(req));
+
+                    current = current->next;
                 }
 
                 sprintf(req,".\r\n");
@@ -933,6 +936,8 @@ void send_email(SMTPClient client, MailMessage message, int enableLogs)
                     sprintf(req,"\r\n\r\n"
                                 "--123456789\r\n");
                     send(clientfd, req, strlen(req), 0);
+
+                    current = current->next;
                 }
 
                 sprintf(req,".\r\n");
